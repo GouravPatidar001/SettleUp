@@ -1,0 +1,272 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SettleUp - Login & Sign Up</title>
+    <link rel="stylesheet" href="css/login.css">
+</head>
+<body>
+    <div class="wrapper">
+        <div class="branding">
+  
+        </div>
+
+        <div class="auth-container">
+            <div class="toggle-container">
+                <button id="loginToggle" class="toggle-btn active" onclick="switchTab('login')">Log In</button>
+                <button id="signupToggle" class="toggle-btn" onclick="switchTab('signup')">Sign Up</button>
+            </div>
+
+            <form id="loginForm" class="auth-form active-form">
+                <h2>Welcome back!</h2>
+                <div class="input-group">
+                    <label for="loginEmail">Email Address</label>
+                    <input type="email" id="loginEmail" placeholder="you@example.com" required>
+                </div>
+                <div class="input-group">
+                    <label for="loginPassword">Password</label>
+                    <input type="password" id="loginPassword" placeholder="Enter your password" required>
+                </div>
+                <button type="submit" class="primary-btn">Log In</button>
+                <a href="#" class="forgot-link">Forgot password?</a>
+            </form>
+
+            <form id="signupForm" class="auth-form">
+                <h2>Create an account</h2>
+                <div class="input-group">
+                    <label for="signupName">Full Name</label>
+                    <input type="text" id="signupName" placeholder="e.g. John Doe" required>
+                </div>
+                <div class="input-group">
+                    <label for="signupEmail">Email Address</label>
+                    <input type="email" id="signupEmail" placeholder="you@example.com" required>
+                </div>
+                <div class="input-group">
+                    <label for="signupPassword">Password</label>
+                    <input type="password" id="signupPassword" placeholder="Create a strong password" required>
+                </div>
+                <button type="submit" class="primary-btn">Sign Up</button>
+            </form>
+        </div>
+    </div>
+
+    <script type="module">
+
+    // 1. Import Firebase tools directly from Google
+
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-app.js";
+
+    import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, updateProfile } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-auth.js";
+
+
+
+    // 2. YOUR FIREBASE CONFIGURATION (You will get this from the Firebase Console)
+
+    
+
+        const firebaseConfig = {
+
+    apiKey: "AIzaSyALijpIAbmjIuqFYfCxvOZOk0Nm54OVk_c",
+
+    authDomain: "settleup-b67de.firebaseapp.com",
+
+    projectId: "settleup-b67de",
+
+    storageBucket: "settleup-b67de.firebasestorage.app",
+
+    messagingSenderId: "278043179077",
+
+    appId: "1:278043179077:web:6c71b5bd11f840e8984b2c",
+
+  };
+
+    // 3. Initialize Firebase
+
+    const app = initializeApp(firebaseConfig);
+
+    const auth = getAuth(app);
+
+
+
+    // --- UI Logic (Your existing tab switcher) ---
+
+    window.switchTab = function(tabName) {
+
+        const loginToggle = document.getElementById('loginToggle');
+
+        const signupToggle = document.getElementById('signupToggle');
+
+        const loginForm = document.getElementById('loginForm');
+
+        const signupForm = document.getElementById('signupForm');
+
+
+
+        loginToggle.classList.remove('active');
+
+        signupToggle.classList.remove('active');
+
+        loginForm.classList.remove('active-form');
+
+        signupForm.classList.remove('active-form');
+
+
+
+        if (tabName === 'login') {
+
+            loginToggle.classList.add('active');
+
+            loginForm.classList.add('active-form');
+
+        } else if (tabName === 'signup') {
+
+            signupToggle.classList.add('active');
+
+            signupForm.classList.add('active-form');
+
+        }
+
+    }
+
+
+
+    // --- SIGN UP LOGIC ---
+
+    document.getElementById('signupForm').addEventListener('submit', async function(e) {
+
+        e.preventDefault();
+
+        
+
+        const name = document.getElementById('signupName').value;
+
+        const email = document.getElementById('signupEmail').value;
+
+        const password = document.getElementById('signupPassword').value;
+
+        const submitBtn = this.querySelector('button');
+
+
+
+        try {
+
+            submitBtn.innerText = "Signing up..."; // Give user feedback
+
+            
+
+            // Tell Firebase to create the user
+
+            const userCredential = await createUserWithEmailAndPassword(auth, email, password);
+
+            
+
+            // Add their full name to their profile
+
+            await updateProfile(userCredential.user, { displayName: name });
+
+            
+
+            alert("Account created successfully! You are now logged in.");
+
+            window.location.href = "dashboard.html"; // Redirect to your app
+
+            
+
+        } catch (error) {
+
+            alert("Error: " + error.message); // Show error (e.g., password too weak)
+
+            submitBtn.innerText = "Sign Up";
+
+        }
+
+    });
+
+
+
+    // --- LOG IN LOGIC ---
+
+    document.getElementById('loginForm').addEventListener('submit', async function(e) {
+
+        e.preventDefault();
+
+        
+
+        const email = document.getElementById('loginEmail').value;
+
+        const password = document.getElementById('loginPassword').value;
+
+        const submitBtn = this.querySelector('button');
+
+
+
+        try {
+
+            submitBtn.innerText = "Logging in...";
+
+            
+
+            // Tell Firebase to log the user in
+
+            await signInWithEmailAndPassword(auth, email, password);
+
+            
+
+            console.log("Logged in successfully!");
+
+            window.location.href = "dashboard.html"; // Redirect to your app
+
+            
+
+        } catch (error) {
+
+            alert("Login failed: " + error.message); // Show error (e.g., wrong password)
+
+            submitBtn.innerText = "Log In";
+
+        }
+
+    });
+
+
+	// Function to switch between Login and Sign Up tabs
+function switchTab(tabName) {
+    // Get all UI elements
+    const loginToggle = document.getElementById('loginToggle');
+    const signupToggle = document.getElementById('signupToggle');
+    const loginForm = document.getElementById('loginForm');
+    const signupForm = document.getElementById('signupForm');
+
+    // Reset active classes
+    loginToggle.classList.remove('active');
+    signupToggle.classList.remove('active');
+    loginForm.classList.remove('active-form');
+    signupForm.classList.remove('active-form');
+
+    // Apply active classes based on selection
+    if (tabName === 'login') {
+        loginToggle.classList.add('active');
+        loginForm.classList.add('active-form');
+    } else if (tabName === 'signup') {
+        signupToggle.classList.add('active');
+        signupForm.classList.add('active-form');
+    }
+}
+
+// Optional: Prevent default form submission to let you handle the backend later
+document.getElementById('loginForm').addEventListener('submit', function(e) {
+    e.preventDefault();
+    console.log("Login form submitted");
+    // Add your login API call here, then redirect:
+    // window.location.href = "dashboard.html"; 
+});
+
+document.getElementById('signupForm').addEventListener('submit', function(e) {
+    e.preventDefault();
+    console.log("Sign up form submitted");
+    // Add your signup API call here
+});
+</script>	
+</body>
+</html>	

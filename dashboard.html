@@ -1,0 +1,277 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SettleUp | Final Dashboard</title>
+    <link rel="stylesheet" href="css/dashboard.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <script src="https://unpkg.com/@phosphor-icons/web"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+
+    <div class="modal-overlay auth-overlay" id="auth-modal" style="display: flex; z-index: 9999; background: var(--dark);">
+        <div class="modal-box">
+            <div class="modal-header">
+                <h3>Welcome to SettleUp</h3>
+            </div>
+            <div class="modal-body">
+                <p style="color: var(--gray); font-size: 0.9rem; margin-bottom: 15px;">Please enter your name to continue.</p>
+                <div class="input-group">
+                    <label>Your Name</label>
+                    <input type="text" id="auth-user-name" placeholder="E.g. Rahul, Priya..." required>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn-primary btn-full" id="auth-login-btn">Enter Dashboard <i class="ph ph-arrow-right"></i></button>
+            </div>
+        </div>
+    </div>
+
+    <div id="toast-container" class="toast-container"></div>
+
+    <aside class="sidebar">
+        <div class="brand">
+            <i class="ph-fill ph-leaf"></i>
+            <span>Settle<span>Up</span></span>
+        </div>
+        <nav class="nav-list">
+            <p class="nav-category">Management</p>
+            <a href="#" class="nav-link active" id="nav-overview" onclick="switchView('overview')">
+                <i class="ph ph-squares-four"></i> Overview
+            </a>
+            <a href="#" class="nav-link" id="nav-groups" onclick="switchView('groups')">
+                <i class="ph ph-users-three"></i> My Groups
+            </a>
+            <p class="nav-category">Reports</p>
+            <a href="#" class="nav-link" id="nav-spend" onclick="switchView('spend')">
+                <i class="ph ph-wallet"></i> Group Spend
+            </a>
+            <a href="#" class="nav-link" id="nav-settle" onclick="switchView('settlement')">
+                <i class="ph ph-handshake"></i> Settlement
+            </a>
+            <a href="#" class="nav-link" id="nav-charts" onclick="switchView('charts')">
+                <i class="ph ph-chart-pie-slice"></i> Analytics
+            </a>
+            
+            <a href="#" class="nav-link" id="logout-btn" style="margin-top: 20px; color: #ef4444;">
+                <i class="ph ph-sign-out"></i> Logout
+            </a>
+        </nav>
+        <div class="sidebar-balance-card">
+            <p>Net Balance</p>
+            <h3 id="side-net-balance">₹0</h3>
+            <div class="status-dot"></div>
+        </div>
+    </aside>
+
+    <main class="main-wrapper">
+        <header class="dashboard-header">
+            <div class="header-content">
+                <h1 id="greeting-text">Hello, User!</h1>
+                <p id="date-text">Track your shared expenses easily.</p>
+            </div>
+            
+            <div class="header-actions">
+                <div class="search-box">
+                    <i class="ph ph-magnifying-glass"></i>
+                    <input type="text" id="group-search" placeholder="Search...">
+                </div>
+                <button class="btn-secondary" id="open-join-modal">
+                    <i class="ph ph-users"></i> Join
+                </button>
+                <button class="btn-primary" id="open-group-modal">
+                    <i class="ph ph-plus-circle"></i> Create
+                </button>
+            </div>
+        </header>
+
+        <div id="view-overview" class="view-section active">
+            <section class="metrics-row">
+                <div class="metric-card grad-green">
+                    <div class="card-icon-white"><i class="ph ph-trend-up"></i></div>
+                    <div class="card-info-white"><span class="label-white">Total Spent</span><h2 id="box-exp">₹0</h2></div>
+                </div>
+                <div class="metric-card grad-blue">
+                    <div class="card-icon-white"><i class="ph ph-users"></i></div>
+                    <div class="card-info-white"><span class="label-white">Active Groups</span><h2 id="box-grp">0</h2></div>
+                </div>
+                <div class="metric-card grad-orange">
+                    <div class="card-icon-white"><i class="ph ph-hand-coins"></i></div>
+                    <div class="card-info-white"><span class="label-white">You are Owed</span><h2 id="box-owed">₹0</h2></div>
+                </div>
+                <div class="metric-card grad-purple">
+                    <div class="card-icon-white"><i class="ph ph-receipt"></i></div>
+                    <div class="card-info-white"><span class="label-white">Transactions</span><h2 id="box-act">0</h2></div>
+                </div>
+            </section>
+
+            <div class="dashboard-grid">
+                <div class="dash-card">
+                    <div class="dash-card-header">
+                        <h3><i class="ph ph-chart-pie-slice"></i> Spending Breakdown</h3>
+                    </div>
+                    <div class="dash-chart-container">
+                        <canvas id="dashboardPieChart"></canvas>
+                    </div>
+                </div>
+                <div class="dash-card">
+                    <div class="dash-card-header">
+                        <h3><i class="ph ph-clock-counter-clockwise"></i> Recent Activity</h3>
+                    </div>
+                    <div class="activity-feed" id="recent-activity-list">
+                        <div class="empty-state-small">No recent activity</div>
+                    </div>
+                </div>
+            </div>
+
+            <h3 class="section-title mt-4">Quick Access</h3>
+            <div class="groups-grid" id="groups-container-overview"></div>
+        </div>
+
+        <div id="view-groups" class="view-section">
+            <h2 class="section-title">All Groups</h2>
+            <div class="groups-grid" id="groups-container-all"></div>
+        </div>
+
+        <div id="view-spend" class="view-section">
+            <div class="spend-header-summary">
+                <h2>Group-wise Report</h2>
+                <div class="total-badge">Total: <span id="report-total-global">₹0</span></div>
+            </div>
+            <div class="group-spend-grid" id="spend-groups-container"></div>
+        </div>
+
+        <div id="view-settlement" class="view-section">
+            <div class="charts-header">
+                <h2>Settlement Plan</h2>
+                <p style="color:var(--gray);">Clear debts instantly by clicking the checkmark.</p>
+            </div>
+            <div class="settlement-grid" id="settlement-container">
+                </div>
+        </div>
+
+        <div id="view-charts" class="view-section">
+            <div class="charts-header">
+                <h2>Deep Analytics</h2>
+                <div class="select-wrapper">
+                    <i class="ph ph-caret-down"></i>
+                    <select id="chart-group-select"><option value="">Select a Group</option></select>
+                </div>
+            </div>
+            <div id="charts-empty-state" class="empty-chart-msg">
+                <i class="ph ph-chart-bar"></i>
+                <p>Select a group to analyze details.</p>
+            </div>
+            <div id="charts-content" style="display: none;">
+                <div class="chart-stats-row">
+                    <div class="c-stat-card">
+                        <small>Highest Spender</small>
+                        <h4 id="stat-top-spender">-</h4>
+                        <i class="ph-fill ph-crown card-bg-icon"></i>
+                    </div>
+                    <div class="c-stat-card">
+                        <small>Most Spent On</small>
+                        <h4 id="stat-top-cat">-</h4>
+                        <i class="ph-fill ph-tag card-bg-icon"></i>
+                    </div>
+                    <div class="c-stat-card">
+                        <small>Total Transactions</small>
+                        <h4 id="stat-tx-count">0</h4>
+                        <i class="ph-fill ph-receipt card-bg-icon"></i>
+                    </div>
+                </div>
+
+                <div class="analytics-grid">
+                    <div class="chart-card">
+                        <h3><i class="ph ph-pizza"></i> Category Split</h3>
+                        <div class="chart-container-sq">
+                            <canvas id="analyticsCategoryChart"></canvas>
+                        </div>
+                    </div>
+                    <div class="chart-card">
+                        <h3><i class="ph ph-users"></i> Member Share</h3>
+                        <div class="chart-container-rect">
+                            <canvas id="analyticsMemberChart"></canvas>
+                        </div>
+                    </div>
+                    <div class="chart-card full-width">
+                        <h3><i class="ph ph-trend-up"></i> Spending Trend (Over Time)</h3>
+                        <div class="chart-container-rect">
+                            <canvas id="analyticsTrendChart"></canvas>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <div class="modal-overlay" id="join-modal">
+        <div class="modal-box">
+            <div class="modal-header"><h3>Join Group</h3><i class="ph ph-x close-btn"></i></div>
+            <div class="modal-body">
+                <div class="input-group">
+                    <label>Enter 5-Letter Group Code</label>
+                    <input type="text" id="join-group-code" placeholder="e.g. ABCDE" maxlength="5" style="text-transform: uppercase;">
+                </div>
+            </div>
+            <div class="modal-footer"><button class="btn-primary btn-full" id="final-join-group">Join Group <i class="ph ph-spinner spin-icon" style="display:none;"></i></button></div>
+        </div>
+    </div>
+
+    <div class="modal-overlay" id="group-modal">
+        <div class="modal-box">
+            <div class="modal-header"><h3>Create Group</h3><i class="ph ph-x close-btn"></i></div>
+            <div class="modal-body">
+                <div class="input-group"><label>Group Name</label><input type="text" id="group-name" placeholder="e.g. Goa Trip"></div>
+                <div class="input-group mt-3"><label>Type</label>
+                    <div class="compact-cat-grid" id="group-type-selector">
+                        <div class="cat-chip active" data-type="Trip"><i class="ph ph-airplane-tilt"></i> Trip</div>
+                        <div class="cat-chip" data-type="Home"><i class="ph ph-house-line"></i> Home</div>
+                        <div class="cat-chip" data-type="Couple"><i class="ph ph-heart"></i> Couple</div>
+                        <div class="cat-chip" data-type="Other"><i class="ph ph-dots-three-circle"></i> Other</div>
+                    </div>
+                </div>
+                <div class="input-group mt-3"><label>Members</label>
+                    <div class="member-input-row"><input type="text" id="member-name" placeholder="Add name"><button id="add-member-btn"><i class="ph ph-plus"></i></button></div>
+                    <div class="member-tags" id="member-chips-container"></div>
+                </div>
+            </div>
+            <div class="modal-footer"><button class="btn-primary btn-full" id="final-create-group">Create Group <i class="ph ph-spinner spin-icon" style="display:none;"></i></button></div>
+        </div>
+    </div>
+
+    <div class="modal-overlay" id="tx-modal">
+        <div class="modal-box">
+            <div class="modal-header"><h3>Add Expense</h3><i class="ph ph-x close-btn"></i></div>
+            <div class="modal-body">
+                <div class="payer-section"><label>Who paid?</label><div class="payer-scroll-compact" id="payer-list-container"></div></div>
+                <div class="grid-2 mt-3">
+                    <div class="input-group"><label>For what?</label><input type="text" id="tx-name" placeholder="Dinner"></div>
+                    <div class="input-group"><label>Amount</label><div class="input-wrapper-icon"><span>₹</span><input type="number" id="tx-amt" placeholder="0"></div></div>
+                </div>
+                <div class="input-group mt-3"><label>Category</label>
+                    <div class="compact-cat-grid" id="expense-category-selector">
+                        <div class="cat-chip active" data-cat="General">General</div>
+                        <div class="cat-chip" data-cat="Food">Food</div>
+                        <div class="cat-chip" data-cat="Travel">Travel</div>
+                        <div class="cat-chip" data-cat="Fun">Fun</div>
+                    </div>
+                </div>
+                <div class="split-info-compact" id="split-preview"><span><i class="ph ph-info"></i> Split equally</span></div>
+            </div>
+            <div class="modal-footer"><button class="btn-primary btn-full" id="final-add-tx">Add Expense <i class="ph ph-spinner spin-icon" style="display:none;"></i></button></div>
+        </div>
+    </div>
+
+    <div class="modal-overlay" id="settle-modal">
+        <div class="modal-box">
+            <div class="modal-header"><h3>Settle Up</h3><i class="ph ph-x close-btn"></i></div>
+            <div id="settle-body" class="modal-body"></div>
+        </div>
+    </div>
+
+    <script type="module" src="js/dashboard.js"></script>
+</body>
+</html>

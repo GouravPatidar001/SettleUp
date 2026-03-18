@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>SettleUp – Smart Expense Manager</title>
+  <link rel="stylesheet" href="css/main.css">
+  <script defer src="js/main.js"></script>
+  <link
+    rel="stylesheet"
+    href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"
+  />
+</head>
+<body>
+
+<div class="cursor-glow"></div>
+
+<header class="header">
+  <div class="logo">Settle<span>Up</span></div>
+
+  <nav class="nav">
+    <a href="#hero">Home</a>
+    <a href="#problem-section">Problem</a>
+    <a href="#solution">Solution</a>
+    <a href="#about">About</a>
+    <a href="login.html" class="nav-btn">Get Started</a>
+  </nav>
+</header>
+
+<section id="hero" class="hero reveal">
+  <div class="hero-content">
+    <h1>Split Expenses,<br><span>Settle Instantly,<br></span>Stay Stress-Free</h1>
+    <p>No more awkward money talks. Just fair splits and instant settlements</p>
+    <a href="login.html" class="btn primary">Start Managing</a>
+  </div>
+  <div class="hero-image">
+    <img src="images/hero.png" alt="Expense App">
+  </div>
+</section>
+
+<section id="problem-section" class="section problem-section reveal">
+  <h2 class="section-title">Problems People Face</h2>
+  <div class="problem-grid">
+    <div class="problem-box">
+      <h3>Manual Calculations</h3>
+      <p>Splitting bills by hand often leads to mistakes and unfair calculations.</p>
+    </div>
+    <div class="problem-box">
+      <h3>Lack of Transparency</h3>
+      <p>People forget who paid, who owes, and how much is still pending.</p>
+    </div>
+    <div class="problem-box">
+      <h3>Awkward Money Talks</h3>
+      <p>Asking friends for money repeatedly creates discomfort and tension.</p>
+    </div>
+    <div class="problem-box">
+      <h3>No Expense History</h3>
+      <p>Without proper records, tracking past expenses becomes impossible.</p>
+    </div>
+  </div>
+</section>
+
+<section id="solution" class="section solution-section reveal">
+  <h2 class="section-title">How SettleUp Solves It</h2>
+  <div class="solution-grid">
+    <div class="solution-box">
+      <span>01</span>
+      <h3>Add Expenses</h3>
+      <p>Easily record who paid and for what.</p>
+    </div>
+    <div class="solution-box">
+      <span>02</span>
+      <h3>Auto Split</h3>
+      <p>Automatically split expenses fairly.</p>
+    </div>
+    <div class="solution-box">
+      <span>03</span>
+      <h3>Track Balances</h3>
+      <p>See who owes whom in real time.</p>
+    </div>
+    <div class="solution-box">
+      <span>04</span>
+      <h3>Settle Up</h3>
+      <p>Clear balances and close expenses.</p>
+    </div>
+  </div>
+</section>
+
+<section id="about" class="section about-section reveal">
+  <h2 class="section-title">About SettleUp</h2>
+  <div class="about-wrapper">
+    <div class="about-slider">
+      <div class="slides">
+        <img src="images/about1.png" class="slide active" />
+        <img src="images/about2.png" class="slide" />
+        <img src="images/about3.png" class="slide" />
+      </div>
+      <div class="slider-dots">
+        <span class="dot active"></span>
+        <span class="dot"></span>
+        <span class="dot"></span>
+      </div>
+    </div>
+    <div class="about-content">
+      <h3>Smarter Expense Sharing</h3>
+      <p>SettleUp is designed for friends and teams who want fairness.</p>
+      <button class="btn primary">Learn More</button>
+    </div>
+  </div>
+</section>
+
+<section id="auth" class="auth-section reveal">
+  <div class="auth-wrapper">
+    <h2>Ready to Get Started with SettleUp?</h2>
+    <p>Track shared expenses, split bills fairly, and settle payments easily.</p>
+    <div class="auth-actions">
+      <a href="login.html" class="auth-btn primary">Get Started</a>
+      <a href="login.html" class="auth-btn primary">Sign Up</a>
+    </div>
+  </div>
+</section>
+
+<footer class="footer">
+  <div class="footer-container">
+
+    <!-- BRAND -->
+    <div class="footer-brand">
+      <h3>SettleUp</h3>
+      <p>
+        Simplifying shared expenses and making settlements
+        fair, transparent, and stress-free.
+      </p>
+    </div>
+
+    <!-- QUICK LINKS -->
+    <div class="footer-links">
+      <h4>Quick Links</h4>
+      <a href="#hero">Home</a>
+      <a href="#problem-section">Problem</a>
+      <a href="#solution">Solution</a>
+      <a href="#about">About</a>
+      <a href="#auth">Get Started</a>
+    </div>
+
+    <!-- SUPPORT -->
+    <div class="footer-links">
+      <h4>Support</h4>
+      <a href="#">Help Center</a>
+      <a href="#">Privacy Policy</a>
+      <a href="#">Terms of Service</a>
+    </div>
+
+    <!-- SOCIAL -->
+    <div class="footer-social">
+      <h4>Follow Us</h4>
+      <div class="social-icons">
+        <a href="#"><i class="fab fa-instagram"></i></a>
+        <a href="#"><i class="fab fa-twitter"></i></a>
+        <a href="#"><i class="fab fa-linkedin-in"></i></a>
+        <a href="#"><i class="fab fa-github"></i></a>
+      </div>
+    </div>
+
+  </div>
+
+  <div class="footer-bottom">
+    © 2026 SettleUp. All rights reserved.
+  </div>
+</footer>
+
+<script>
+  // Your web app's Firebase configuration (Copy this from the) 
+  const firebaseConfig = {
+    apiKey: "AIzaSyALijpIAbmjIuqFYfCxvOZOk0Nm54OVk_c",
+    authDomain: "settleup-b67de.firebaseapp.com",
+    projectId: "settleup-b67de",
+    storageBucket: "settleup-b67de.firebasestorage.app",
+    messagingSenderId: "278043179077",
+    appId: "1:278043179077:web:6c71b5bd11f840e8984b2c",
+  };
+
+
+  // Initialize Firebase
+  firebase.initializeApp(firebaseConfig);
+</script>
+</body>
+</html>

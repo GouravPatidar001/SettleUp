@@ -1,0 +1,213 @@
+@import url('https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&display=swap');
+
+/* --- Settle Up Premium Glass Variables --- */
+:root {
+    /* The core Settle Up greens */
+    --su-green: #18be52; 
+    --su-green-dark: #18be52;
+    --su-green-glow: #18be52;
+    --su-green-gradient: linear-gradient(135deg, #18be52 0%, #18be52 100%);
+    
+    /* Creating a deep background to make the glass pop */
+    --bg-base: #18be52; 
+    --bg-mesh: 
+        radial-gradient(circle at 15% 20%, rgba(0, 191, 165, 0.15) 0%, transparent 40%),
+        radial-gradient(circle at 85% 80%, rgba(0, 191, 165, 0.15) 0%, transparent 40%),
+        radial-gradient(circle at 50% 50%, rgb(44, 59, 47) 0%, rgba(6, 20, 17, 1) 100%);
+        
+    /* Glassmorphism settings */
+    --glass-bg: rgba(255, 255, 255, 0.03);
+    --glass-border: rgba(255, 255, 255, 0.08);
+    --text-primary: #ffffff;
+    --text-secondary: #18be52;
+    --input-bg: rgba(0, 0, 0, 0.25);
+    --input-border: rgba(255, 255, 255, 0.1);
+}
+
+/* Basic Reset */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Outfit', sans-serif;
+}
+
+body {
+    background-color: var(--bg-base);
+    background-image: var(--bg-mesh);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    color: var(--text-primary);
+}
+
+.wrapper {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 100%;
+    max-width: 420px;
+    padding: 20px;
+}
+
+/* --- Classy Glass Container with Blur --- */
+.auth-container {
+    background: var(--glass-bg);
+    width: 100%;
+    border-radius: 24px;
+    border: 1px solid var(--glass-border);
+    /* The Blur Effect */
+    backdrop-filter: blur(24px);
+    -webkit-backdrop-filter: blur(24px);
+    box-shadow: 0 30px 60px rgba(0, 0, 0, 0.5), inset 0 1px 0 rgba(255, 255, 255, 0.1);
+    overflow: hidden;
+    position: relative;
+}
+
+/* --- Elegant Toggles --- */
+.toggle-container {
+    display: flex;
+    border-bottom: 1px solid var(--glass-border);
+    background: rgba(0, 0, 0, 0.15);
+}
+
+.toggle-btn {
+    flex: 1;
+    padding: 20px;
+    background: none;
+    border: none;
+    font-size: 1rem;
+    font-weight: 500;
+    color: var(--text-secondary);
+    cursor: pointer;
+    position: relative;
+    transition: all 0.4s ease;
+    letter-spacing: 0.5px;
+}
+
+.toggle-btn:hover {
+    color: rgba(255, 255, 255, 0.9);
+}
+
+.toggle-btn.active {
+    color: var(--text-primary);
+    font-weight: 600;
+}
+
+/* Animated Green Gradient Underline */
+.toggle-btn::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 0;
+    height: 2px;
+    background: var(--su-green-gradient);
+    transition: width 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.toggle-btn.active::after {
+    width: 100%;
+}
+
+/* --- Sliding Form Mechanics --- */
+.auth-form {
+    display: none;
+    padding: 40px 32px;
+}
+
+.auth-form.active-form {
+    display: block;
+    animation: elegantSlide 0.6s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+/* --- Refined Inputs --- */
+.input-group {
+    margin-bottom: 24px;
+}
+
+.input-group label {
+    display: block;
+    margin-bottom: 8px;
+    font-size: 0.85rem;
+    color: var(--text-secondary);
+    font-weight: 400;
+    letter-spacing: 0.5px;
+}
+
+.input-group input {
+    width: 100%;
+    padding: 16px;
+    background: var(--input-bg);
+    border: 1px solid var(--input-border);
+    border-radius: 12px;
+    font-size: 1rem;
+    color: var(--text-primary);
+    transition: all 0.3s ease;
+}
+
+.input-group input:focus {
+    outline: none;
+    border-color: var(--su-green);
+    background: rgba(0, 0, 0, 0.4);
+    box-shadow: 0 0 0 4px rgba(0, 191, 165, 0.15);
+}
+
+/* --- Premium Green Button --- */
+.primary-btn {
+    width: 100%;
+    padding: 16px;
+    background: var(--su-green-gradient);
+    color: white;
+    border: none;
+    border-radius: 12px;
+    font-size: 1.05rem;
+    font-weight: 600;
+    letter-spacing: 0.5px;
+    cursor: pointer;
+    margin-top: 10px;
+    position: relative;
+    overflow: hidden;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    box-shadow: 0 10px 20px rgba(0, 191, 165, 0.15);
+}
+
+.primary-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 15px 25px rgba(0, 191, 165, 0.25);
+}
+
+.primary-btn:active {
+    transform: translateY(1px);
+}
+
+/* --- Elegant Links --- */
+.forgot-link {
+    display: block;
+    text-align: center;
+    margin-top: 24px;
+    color: var(--text-secondary);
+    text-decoration: none;
+    font-size: 0.9rem;
+    transition: color 0.3s ease;
+}
+
+.forgot-link:hover {
+    color: var(--su-green);
+}
+
+/* --- The Sliding Animation --- */
+@keyframes elegantSlide {
+    0% { 
+        opacity: 0; 
+        transform: translateX(30px); /* Slides in from the right */
+        filter: blur(4px);
+    }
+    100% { 
+        opacity: 1; 
+        transform: translateX(0); 
+        filter: blur(0);
+    }
+}
